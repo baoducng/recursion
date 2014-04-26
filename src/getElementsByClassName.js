@@ -11,44 +11,42 @@ var getElementsByClassName = function(className){
   var storage;
 
     function checkNode(node){
-        if (node.classList){ //added this here because of the undefined error (cannot called contains of undefined)
+        if (node.classList){
             if(node.classList.contains(className)){result.push(node)}
-            if (node.hasChildNodes()){
-                storage = node.childNodes;
-                for (var i =0; i < storage.length; i++){
-                    console.log(storage[i]);
-                    checkNode(storage[i]);//recursion Q: is the storage variable affected in this case during recursion? does it get overide?
-                }
+        }
+        if (node.hasChildNodes()){
+            for (var i =0; i < node.childNodes.length; i++){
+                checkNode(node.childNodes[i]);
             }
         }
     }
     checkNode(currentNode);
+
     return result;
 };
 
-
-
-
-
 /*
- function check(node){
- if (node.hasChildNodes()){ //see if they have childNode.
- storage = node.childNodes;
- //go through all the childNode
- console.log(storage);
- for (var i = 0; i < storage.length; i++){
- // look at classList
- if (storage[i].classList){ //i did this because i was getting the undefined error
- //check if className is in classlist
- //console.log(storage[i].classList);
- //console.log(storage[i].classList.contains(className));//nothing contains className?
- if (storage[i].classList.contains(className)){//problem with contains.
- result.push(storage[i]);
+
+ var getElementsByClassName = function(className){
+
+ var result = [];
+ var currentNode = document.body;
+ var storage;
+
+ function checkNode(node){
+    if (node.classList){
+        if(node.classList.contains(className)){result.push(node)}
+        if (node.hasChildNodes()){
+        storage = node.childNodes;
+        for (var i =0; i < storage.length; i++){
+        checkNode(storage[i]);
+        }
+       }
  }
- check(storage[i]);
  }
- }
- }
- }
- check(currentNode);
+ checkNode(currentNode);
+ return result;
+ };
  */
+
+
