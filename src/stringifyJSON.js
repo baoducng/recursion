@@ -1,9 +1,17 @@
 // this is what you would do if you liked things to be easy:
 // var stringifyJSON = JSON.stringify;
+//length of an object
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
-    var result, temp;
+    var result, temp, size, count =0;
     //if array
     if (Array.isArray(obj)){
         if (obj.length === 0){return '[]'}
@@ -11,9 +19,10 @@ var stringifyJSON = function(obj) {
             result = '[';
             for (var i =0; i < obj.length; i++){
                 //feed the function back in here
-                result.concat(stringifyJSON(obj[i]))
+                result += stringifyJSON(obj[i]);
+                if ( i < obj.length - 1) {result += ','}
                 }
-            result.concat(']');
+            result += ']';
             return result;
         }
     }
@@ -25,16 +34,17 @@ var stringifyJSON = function(obj) {
             return 'null'
         }
         else{
-
+            size = Object.size(obj);
             result = '{';
-            //process that property in the object, and then remove that property?
-            //use splice to insert into the middle of the string.
-            //delete the object
+
             for (var key in obj){
-                result.concat('"' + key + '":');
-                result.concat(stringifyJSON(obj[key]));
+                if (typeof obj[key] === "function" || key === "undefined" ){ result += ''}
+                else {result += ('"' + key + '":');
+                result += (stringifyJSON(obj[key]));
+                count ++;
+                if(count < size){result += ','}}
             }
-        result.concat('}');
+        result += '}';
         return result;
         }
     }
@@ -44,18 +54,10 @@ var stringifyJSON = function(obj) {
         temp = obj.toString();
         return temp;
     }
-    /*
-    else if (typeof obj === "boolean"){
-        temp = obj.toString();
-        return temp;
-    }
-    */
+
     else if (typeof obj === "string"|| typeof obj === "undefined"){
         temp = '"' + obj + '"';
         return temp;
     }
 };
 
-var test1 = Array.isArray([]);
-var test = JSON.stringify('Hello World');
-console.log(test1);
